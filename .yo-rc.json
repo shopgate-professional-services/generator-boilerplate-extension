@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Oliver Müller",
+      "authorEmail": "oliver.mueller@shopgate.com",
+      "authorUrl": ""
+    }
+  }
+}
