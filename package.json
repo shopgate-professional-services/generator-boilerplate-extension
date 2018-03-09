@@ -22,8 +22,10 @@
     "jest": "^22.0.6"
   },
   "dependencies": {
-    "yeoman-generator": "^2.0.1",
     "chalk": "^2.1.0",
+    "download": "^6.2.5",
+    "yeoman-generator": "^2.0.1",
+    "yeoman-remote": "^1.0.1",
     "yosay": "^2.0.1"
   },
   "jest": {

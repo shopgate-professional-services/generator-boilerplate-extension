@@ -2,6 +2,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const remote = require('yeoman-remote');
 
 module.exports = class extends Generator {
   initializing() {
@@ -13,34 +14,81 @@ module.exports = class extends Generator {
   }
 
   async prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(`Great decission to start our ${chalk.red('boilerplate-extension')} generator!`)
-    );
-
     const prompts = [
       {
-        type: 'confirm',
-        name: 'someAnswer',
-        message: 'Would you like to enable this option?',
-        default: true
+        type: 'input',
+        name: 'organization',
+        message: 'Please name your organization:',
+        default: 'shopgate'
+      },
+      {
+        type: 'input',
+        name: 'extensionName',
+        message: 'Please name your extension:'
       }
     ];
 
     return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
       this.props = props;
     });
   }
 
   writing() {
-    this.fs.copy(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt')
+    const done = this.async();
+    remote(
+      'https://github.com/Menes1337/cloud-sdk-boilerplate-extension/archive/master.tar.gz',
+      (err, cachePath) => {
+        this.log(cachePath);
+        this.fs.copy(
+          cachePath,
+          this.destinationPath(
+            `extensions/${this.props.organization}-${this.props.extensionName}`
+          )
+        );
+
+        done();
+      },
+      false
     );
   }
 
   install() {
-    this.installDependencies();
+    process.chdir(`./extensions/${this.props.organization}-${this.props.extensionName}`);
+
+    const config = {
+      extension: {
+        organization: this.props.organization,
+        name: this.props.extensionName,
+        licence: 'UNLICENSED' // ["Apache-2.0", "UNLICENSED"]
+      },
+      frontend: {
+        active: true,
+        tests: true,
+        lint: true,
+        'dependency-checker': true
+      },
+      backend: {
+        active: true,
+        tests: true,
+        lint: true,
+        'dependency-checker': true
+      },
+      'pre-commit': true,
+      travis: {
+        active: true,
+        'slack-secure-key': ''
+      }
+    }
+
+    this.fs.copyTpl('package.json', 'package.json', config);
+    this.fs.copyTpl('extension/package.json', 'extension/package.json', config);
+    this.fs.copyTpl('frontend/package.json', 'frontend/package.json', config);
+    this.fs.copyTpl('.travis.yml', '.travis.yml', config);
+    this.fs.copyTpl('README.md', 'README.md', config);
+    this.fs.copyTpl('extension-config.json', 'extension-config.json', config);
+
+    this.spawnCommandSync('git', ['init', '--quiet']);
+
+    this.installDependencies({ npm: true, bower: false });
   }
 };
