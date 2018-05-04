@@ -1,6 +1,6 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const remote = require('yeoman-remote');
+const tarball = require('tarball-extract');
 
 module.exports = class extends Generator {
   async prompting() {
@@ -86,24 +86,34 @@ module.exports = class extends Generator {
 
   writing() {
     const done = this.async();
-    remote(
-      'https://github.com/Menes1337/cloud-sdk-boilerplate-extension/archive/master.tar.gz',
-      (err, cachePath) => {
-        this.fs.copy(
-          cachePath + '/**/*',
-          this.destinationPath(
-            `extensions/${this.props.organization}-${this.props.extension}`
-          )
-        );
-        this.fs.copy(
-          cachePath + '/.*',
-          this.destinationPath(
-            `extensions/${this.props.organization}-${this.props.extension}`
-          )
-        );
+    tarball.extractTarballDownload(
+      'https://codeload.github.com/Menes1337/cloud-sdk-boilerplate-extension/tar.gz/master',
+      this.destinationPath('./boilerplate.tar.gz'),
+      this.destinationPath(
+        `./extensions/${this.props.organization}-${this.props.extension}`
+      ),
+      {},
+      err => {
+        if (err) {
+          console.log('Fehler');
+          console.log(err);
+          return;
+        }
 
         const extensionPath = this.destinationPath(
           `extensions/${this.props.organization}-${this.props.extension}/`
+        );
+
+        this.fs.move(
+          extensionPath + 'cloud-sdk-boilerplate-extension-master/**/*',
+          String(extensionPath),
+          this.config
+        );
+
+        this.fs.move(
+          extensionPath + 'cloud-sdk-boilerplate-extension-master/.*',
+          String(extensionPath),
+          this.config
         );
 
         this.fs.copyTpl(
@@ -113,12 +123,16 @@ module.exports = class extends Generator {
         );
 
         done();
-      },
-      false
+      }
     );
   }
 
   install() {
     process.chdir(`./extensions/${this.props.organization}-${this.props.extension}`);
+    this.spawnCommandSync('rm', [
+      '-rf',
+      '../../boilerplate.tar.gz',
+      './cloud-sdk-boilerplate-extension-master'
+    ]);
   }
 };
