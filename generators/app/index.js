@@ -58,6 +58,10 @@ module.exports = class extends Generator {
       this.composeWith(require.resolve('../travis'), {
         config: this.config
       });
+
+      this.composeWith(require.resolve('../readme'), {
+        config: this.config
+      });
     });
   }
 
@@ -105,11 +109,6 @@ module.exports = class extends Generator {
           extensionPath + 'pipelines/awesomeOrganization.awesomePipeline.v1.json'
         );
 
-        this.fs.copyTpl(
-          extensionPath + 'README.md',
-          extensionPath + 'README.md',
-          this.config
-        );
         this.fs.copyTpl(
           extensionPath + 'extension-config.json',
           extensionPath + 'extension-config.json',
