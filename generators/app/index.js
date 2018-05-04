@@ -26,14 +26,10 @@ module.exports = class extends Generator {
     return this.prompt(prompts).then(props => {
       this.props = props;
 
-      this.composeWith(require.resolve('../repository'), {
-        repositoryAvailable: this.props.repositoryAvailable
-      });
-
       this.config = {
         extension: {
-          organization: this.props.extensionName,
-          name: this.props.organization,
+          organization: this.props.organization,
+          name: this.props.extensionName,
           licence: 'UNLICENSED' // ["Apache-2.0", "UNLICENSED"]
         },
         frontend: {
@@ -54,6 +50,14 @@ module.exports = class extends Generator {
           'slack-secure-key': ''
         }
       };
+
+      this.composeWith(require.resolve('../repository'), {
+        repositoryAvailable: this.props.repositoryAvailable
+      });
+
+      this.composeWith(require.resolve('../travis'), {
+        config: this.config
+      });
     });
   }
 
@@ -102,11 +106,6 @@ module.exports = class extends Generator {
         );
 
         this.fs.copyTpl(
-          extensionPath + '.travis.yml',
-          extensionPath + '.travis.yml',
-          this.config
-        );
-        this.fs.copyTpl(
           extensionPath + 'README.md',
           extensionPath + 'README.md',
           this.config
@@ -120,6 +119,7 @@ module.exports = class extends Generator {
         if (this.config.extension.licence === 'UNLICENSED') {
           this.fs.delete(extensionPath + 'LICENSE.md');
         }
+
         done();
       },
       false
@@ -127,7 +127,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    console.log('install mail generator');
     process.chdir(`./extensions/${this.props.organization}-${this.props.extensionName}`);
 
     process.chdir(`./extension/`);
