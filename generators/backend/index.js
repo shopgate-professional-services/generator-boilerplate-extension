@@ -48,4 +48,12 @@ module.exports = class extends Generator {
       extensionPath + 'pipelines/awesomeOrganization.awesomePipeline.v1.json'
     );
   }
+
+  install() {
+    process.chdir(`./extension/`);
+
+    this.spawnCommandSync('npm', ['i']);
+
+    process.chdir(`../`);
+  }
 };

@@ -34,4 +34,12 @@ module.exports = class extends Generator {
       this.options.config
     );
   }
+
+  install() {
+    process.chdir(`./frontend/`);
+
+    this.spawnCommandSync('npm', ['i']);
+
+    process.chdir(`../`);
+  }
 };

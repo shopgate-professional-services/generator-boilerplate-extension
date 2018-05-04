@@ -119,13 +119,5 @@ module.exports = class extends Generator {
 
   install() {
     process.chdir(`./extensions/${this.props.organization}-${this.props.extensionName}`);
-
-    process.chdir(`./extension/`);
-
-    this.spawnCommandSync('npm', ['i']);
-
-    process.chdir(`../frontend/`);
-
-    this.spawnCommandSync('npm', ['i']);
   }
 };
