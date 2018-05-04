@@ -51,6 +51,14 @@ module.exports = class extends Generator {
         }
       };
 
+      this.composeWith(require.resolve('../backend'), {
+        config: this.config
+      });
+
+      this.composeWith(require.resolve('../frontend'), {
+        config: this.config
+      });
+
       this.composeWith(require.resolve('../repository'), {
         repositoryAvailable: this.props.repositoryAvailable
       });
@@ -85,28 +93,6 @@ module.exports = class extends Generator {
 
         const extensionPath = this.destinationPath(
           `extensions/${this.props.organization}-${this.props.extensionName}/`
-        );
-
-        this.fs.copyTpl(
-          extensionPath + 'extension/package.json',
-          extensionPath + 'extension/package.json',
-          this.config
-        );
-        this.fs.copyTpl(
-          extensionPath + 'frontend/package.json',
-          extensionPath + 'frontend/package.json',
-          this.config
-        );
-        this.fs.copyTpl(
-          extensionPath + 'pipelines/awesomeOrganization.awesomePipeline.v1.json',
-          extensionPath +
-            'pipelines/' +
-            this.config.extension.organization +
-            '.awesomePipeline.json',
-          this.config
-        );
-        this.fs.delete(
-          extensionPath + 'pipelines/awesomeOrganization.awesomePipeline.v1.json'
         );
 
         this.fs.copyTpl(
