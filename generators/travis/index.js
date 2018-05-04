@@ -9,7 +9,8 @@ module.exports = class extends Generator {
       {
         type: 'confirm',
         name: 'generateTravis',
-        message: 'Do you want to generate .travis.yml?'
+        message: 'Do you want to generate .travis.yml?',
+        default: 'n'
       }
     ]).then(props => {
       this.props.generateTravis = props.generateTravis;

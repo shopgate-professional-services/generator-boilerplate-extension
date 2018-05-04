@@ -23,9 +23,10 @@ module.exports = class extends Generator {
         message: 'What licence do you need?'
       },
       {
-        type: 'confirm',
-        name: 'repositoryAvailable',
-        message: 'Do you already have a git repository for the extension?:'
+        type: 'input',
+        name: 'repositoryUrl',
+        message: 'If existent please add your repository url: ',
+        default: 'n'
       }
     ];
 
@@ -66,7 +67,7 @@ module.exports = class extends Generator {
       });
 
       this.composeWith(require.resolve('../repository'), {
-        repositoryAvailable: this.props.repositoryAvailable
+        repositoryUrl: this.props.repositoryUrl
       });
 
       this.composeWith(require.resolve('../travis'), {

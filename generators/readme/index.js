@@ -9,7 +9,8 @@ module.exports = class extends Generator {
       {
         type: 'confirm',
         name: 'generate',
-        message: 'Do you want to generate a README.md?'
+        message: 'Do you want to generate a README.md?',
+        default: 'n'
       }
     ]).then(props => {
       this.props.generate = props.generate;
