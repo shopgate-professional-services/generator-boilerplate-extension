@@ -78,14 +78,24 @@ module.exports = class extends Generator {
         active: true,
         'slack-secure-key': ''
       }
-    }
+    };
 
-    this.fs.copyTpl('package.json', 'package.json', config);
     this.fs.copyTpl('extension/package.json', 'extension/package.json', config);
     this.fs.copyTpl('frontend/package.json', 'frontend/package.json', config);
-    this.fs.copyTpl('.travis.yml', '.travis.yml', config);
+    this.fs.copyTpl(
+      'pipelines/awesomeOrganization.awesomePipeline.v1.json',
+      'pipelines/' + config.extension.organization + '.awesomePipeline.json',
+      config
+    );
+    this.fs.delete('pipelines/awesomeOrganization.awesomePipeline.v1.json');
+
+    // This.fs.copyTpl('.travis.yml', '.travis.yml', config);
     this.fs.copyTpl('README.md', 'README.md', config);
     this.fs.copyTpl('extension-config.json', 'extension-config.json', config);
+
+    if (config.extension.licence === 'UNLICENSED') {
+      this.fs.delete('LICENSE.md');
+    }
 
     this.spawnCommandSync('git', ['init', '--quiet']);
 
