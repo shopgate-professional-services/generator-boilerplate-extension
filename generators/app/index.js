@@ -17,6 +17,12 @@ module.exports = class extends Generator {
         message: 'Please name your extension:'
       },
       {
+        type: 'list',
+        choices: ['UNLICENSED', 'Apache-2.0'],
+        name: 'licence',
+        message: 'What licence do you need?'
+      },
+      {
         type: 'confirm',
         name: 'repositoryAvailable',
         message: 'Do you already have a git repository for the extension?:'
@@ -30,7 +36,7 @@ module.exports = class extends Generator {
         extension: {
           organization: this.props.organization,
           name: this.props.extensionName,
-          licence: 'UNLICENSED' // ["Apache-2.0", "UNLICENSED"]
+          licence: this.props.licence
         },
         frontend: {
           active: true,
@@ -70,6 +76,10 @@ module.exports = class extends Generator {
       this.composeWith(require.resolve('../readme'), {
         config: this.config
       });
+
+      this.composeWith(require.resolve('../licence'), {
+        config: this.config
+      });
     });
   }
 
@@ -100,10 +110,6 @@ module.exports = class extends Generator {
           extensionPath + 'extension-config.json',
           this.config
         );
-
-        if (this.config.extension.licence === 'UNLICENSED') {
-          this.fs.delete(extensionPath + 'LICENSE.md');
-        }
 
         done();
       },
