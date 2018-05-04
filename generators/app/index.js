@@ -13,7 +13,7 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
-        name: 'extensionName',
+        name: 'extension',
         message: 'Please name your extension:'
       },
       {
@@ -35,7 +35,7 @@ module.exports = class extends Generator {
       this.config = {
         extension: {
           organization: this.props.organization,
-          name: this.props.extensionName,
+          name: this.props.extension,
           licence: this.props.licence
         },
         frontend: {
@@ -91,18 +91,18 @@ module.exports = class extends Generator {
         this.fs.copy(
           cachePath + '/**/*',
           this.destinationPath(
-            `extensions/${this.props.organization}-${this.props.extensionName}`
+            `extensions/${this.props.organization}-${this.props.extension}`
           )
         );
         this.fs.copy(
           cachePath + '/.*',
           this.destinationPath(
-            `extensions/${this.props.organization}-${this.props.extensionName}`
+            `extensions/${this.props.organization}-${this.props.extension}`
           )
         );
 
         const extensionPath = this.destinationPath(
-          `extensions/${this.props.organization}-${this.props.extensionName}/`
+          `extensions/${this.props.organization}-${this.props.extension}/`
         );
 
         this.fs.copyTpl(
@@ -118,6 +118,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    process.chdir(`./extensions/${this.props.organization}-${this.props.extensionName}`);
+    process.chdir(`./extensions/${this.props.organization}-${this.props.extension}`);
   }
 };

@@ -36,6 +36,10 @@ module.exports = class extends Generator {
   }
 
   install() {
+    if (!this.props.generate) {
+      return;
+    }
+
     process.chdir(`./frontend/`);
 
     this.spawnCommandSync('npm', ['i']);

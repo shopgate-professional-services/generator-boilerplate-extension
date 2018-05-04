@@ -31,7 +31,7 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       extensionPath + 'README.md',
       extensionPath + 'README.md',
-      this.config
+      this.options.config
     );
   }
 };
