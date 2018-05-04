@@ -9,7 +9,8 @@ module.exports = class extends Generator {
       {
         type: 'confirm',
         name: 'generate',
-        message: 'Do you want to generate the frontend boilerplate?'
+        message: 'Do you want to generate the frontend boilerplate?',
+        default: true
       }
     ]).then(props => {
       this.props.generate = props.generate;
