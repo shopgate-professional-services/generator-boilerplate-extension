@@ -1,18 +1,8 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
 const remote = require('yeoman-remote');
 
 module.exports = class extends Generator {
-  initializing() {
-    this.composeWith(require.resolve('../tests'));
-    this.composeWith(require.resolve('../lint'));
-    this.composeWith(require.resolve('../dependency-checker'));
-    this.composeWith(require.resolve('../pre-commit'));
-    this.composeWith(require.resolve('../travis'));
-  }
-
   async prompting() {
     const prompts = [
       {
@@ -25,11 +15,45 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'extensionName',
         message: 'Please name your extension:'
+      },
+      {
+        type: 'confirm',
+        name: 'repositoryAvailable',
+        message: 'Do you already have a git repository for the extension?:'
       }
     ];
 
     return this.prompt(prompts).then(props => {
       this.props = props;
+
+      this.composeWith(require.resolve('../repository'), {
+        repositoryAvailable: this.props.repositoryAvailable
+      });
+
+      this.config = {
+        extension: {
+          organization: this.props.extensionName,
+          name: this.props.organization,
+          licence: 'UNLICENSED' // ["Apache-2.0", "UNLICENSED"]
+        },
+        frontend: {
+          active: true,
+          tests: true,
+          lint: true,
+          'dependency-checker': true
+        },
+        backend: {
+          active: true,
+          tests: true,
+          lint: true,
+          'dependency-checker': true
+        },
+        'pre-commit': true,
+        travis: {
+          active: true,
+          'slack-secure-key': ''
+        }
+      };
     });
   }
 
@@ -38,14 +62,64 @@ module.exports = class extends Generator {
     remote(
       'https://github.com/Menes1337/cloud-sdk-boilerplate-extension/archive/master.tar.gz',
       (err, cachePath) => {
-        this.log(cachePath);
         this.fs.copy(
-          cachePath,
+          cachePath + '/**/*',
+          this.destinationPath(
+            `extensions/${this.props.organization}-${this.props.extensionName}`
+          )
+        );
+        this.fs.copy(
+          cachePath + '/.*',
           this.destinationPath(
             `extensions/${this.props.organization}-${this.props.extensionName}`
           )
         );
 
+        const extensionPath = this.destinationPath(
+          `extensions/${this.props.organization}-${this.props.extensionName}/`
+        );
+
+        this.fs.copyTpl(
+          extensionPath + 'extension/package.json',
+          extensionPath + 'extension/package.json',
+          this.config
+        );
+        this.fs.copyTpl(
+          extensionPath + 'frontend/package.json',
+          extensionPath + 'frontend/package.json',
+          this.config
+        );
+        this.fs.copyTpl(
+          extensionPath + 'pipelines/awesomeOrganization.awesomePipeline.v1.json',
+          extensionPath +
+            'pipelines/' +
+            this.config.extension.organization +
+            '.awesomePipeline.json',
+          this.config
+        );
+        this.fs.delete(
+          extensionPath + 'pipelines/awesomeOrganization.awesomePipeline.v1.json'
+        );
+
+        this.fs.copyTpl(
+          extensionPath + '.travis.yml',
+          extensionPath + '.travis.yml',
+          this.config
+        );
+        this.fs.copyTpl(
+          extensionPath + 'README.md',
+          extensionPath + 'README.md',
+          this.config
+        );
+        this.fs.copyTpl(
+          extensionPath + 'extension-config.json',
+          extensionPath + 'extension-config.json',
+          this.config
+        );
+
+        if (this.config.extension.licence === 'UNLICENSED') {
+          this.fs.delete(extensionPath + 'LICENSE.md');
+        }
         done();
       },
       false
@@ -53,52 +127,15 @@ module.exports = class extends Generator {
   }
 
   install() {
+    console.log('install mail generator');
     process.chdir(`./extensions/${this.props.organization}-${this.props.extensionName}`);
 
-    const config = {
-      extension: {
-        organization: this.props.organization,
-        name: this.props.extensionName,
-        licence: 'UNLICENSED' // ["Apache-2.0", "UNLICENSED"]
-      },
-      frontend: {
-        active: true,
-        tests: true,
-        lint: true,
-        'dependency-checker': true
-      },
-      backend: {
-        active: true,
-        tests: true,
-        lint: true,
-        'dependency-checker': true
-      },
-      'pre-commit': true,
-      travis: {
-        active: true,
-        'slack-secure-key': ''
-      }
-    };
+    process.chdir(`./extension/`);
 
-    this.fs.copyTpl('extension/package.json', 'extension/package.json', config);
-    this.fs.copyTpl('frontend/package.json', 'frontend/package.json', config);
-    this.fs.copyTpl(
-      'pipelines/awesomeOrganization.awesomePipeline.v1.json',
-      'pipelines/' + config.extension.organization + '.awesomePipeline.json',
-      config
-    );
-    this.fs.delete('pipelines/awesomeOrganization.awesomePipeline.v1.json');
+    this.spawnCommandSync('npm', ['i']);
 
-    // This.fs.copyTpl('.travis.yml', '.travis.yml', config);
-    this.fs.copyTpl('README.md', 'README.md', config);
-    this.fs.copyTpl('extension-config.json', 'extension-config.json', config);
+    process.chdir(`../frontend/`);
 
-    if (config.extension.licence === 'UNLICENSED') {
-      this.fs.delete('LICENSE.md');
-    }
-
-    this.spawnCommandSync('git', ['init', '--quiet']);
-
-    this.installDependencies({ npm: true, bower: false });
+    this.spawnCommandSync('npm', ['i']);
   }
 };
