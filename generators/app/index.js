@@ -87,7 +87,7 @@ module.exports = class extends Generator {
   writing() {
     const done = this.async();
     tarball.extractTarballDownload(
-      'https://codeload.github.com/Menes1337/cloud-sdk-boilerplate-extension/tar.gz/master',
+      'https://codeload.github.com/shopgate/generator-boilerplate-extension-template/tar.gz/master',
       this.destinationPath('./boilerplate.tar.gz'),
       this.destinationPath(
         `./extensions/${this.props.organization}-${this.props.extension}`
