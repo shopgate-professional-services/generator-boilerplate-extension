@@ -24,6 +24,16 @@ module.exports = class extends Generator {
       }/`
     );
 
+    this.fs.copyTpl(
+      extensionPath + 'extension-config.json',
+      extensionPath + 'extension-config.json',
+      {
+        frontend: {
+          enabled: Boolean(this.props.generate)
+        }
+      }
+    );
+
     if (!this.props.generate) {
       this.fs.delete(extensionPath + 'frontend/**/*');
       return;

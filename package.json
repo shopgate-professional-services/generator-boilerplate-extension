@@ -1,11 +1,9 @@
 {
-  "name": "generator-boilerplate-extension",
-  "version": "0.1.0",
+  "name": "@shopgate/generator-boilerplate-extension",
+  "version": "1.0.0-beta.2",
   "description": "",
   "homepage": "",
-  "files": [
-    "generators"
-  ],
+  "files": ["generators"],
   "main": "generators/index.js",
   "keywords": [],
   "devDependencies": {
@@ -38,20 +36,11 @@
     "test": "jest"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"],
+    "*.json": ["prettier --write", "git add"]
   },
   "eslintConfig": {
-    "extends": [
-      "xo",
-      "prettier"
-    ],
+    "extends": ["xo", "prettier"],
     "env": {
       "jest": true,
       "node": true
@@ -65,9 +54,7 @@
         }
       ]
     },
-    "plugins": [
-      "prettier"
-    ]
+    "plugins": ["prettier"]
   },
   "license": "Apache-2.0"
 }
