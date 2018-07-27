@@ -69,7 +69,6 @@ module.exports = class extends Generator {
       this.composeWith(require.resolve('../repository'), {
         repositoryUrl: this.props.repositoryUrl
       });
-
       this.composeWith(require.resolve('../travis'), {
         config: this.config
       });
@@ -86,6 +85,8 @@ module.exports = class extends Generator {
 
   writing() {
     const done = this.async();
+
+    const extractionFolderName = 'generator-boilerplate-extension-template-master'
     tarball.extractTarballDownload(
       'https://codeload.github.com/shopgate/generator-boilerplate-extension-template/tar.gz/master',
       this.destinationPath('./boilerplate.tar.gz'),
@@ -105,13 +106,13 @@ module.exports = class extends Generator {
         );
 
         this.fs.move(
-          extensionPath + 'cloud-sdk-boilerplate-extension-master/**/*',
+          extensionPath + extractionFolderName +'/**/*',
           String(extensionPath),
           this.config
         );
 
         this.fs.move(
-          extensionPath + 'cloud-sdk-boilerplate-extension-master/.*',
+          extensionPath + extractionFolderName +'/.*',
           String(extensionPath),
           this.config
         );
@@ -132,7 +133,7 @@ module.exports = class extends Generator {
     this.spawnCommandSync('rm', [
       '-rf',
       '../../boilerplate.tar.gz',
-      './cloud-sdk-boilerplate-extension-master'
+      './generator-boilerplate-extension-template-master'
     ]);
   }
 };
