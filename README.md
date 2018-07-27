@@ -12,7 +12,7 @@ npm install -g @shopgate/generator-boilerplate-extension
 Then generate your new project inside of your sgconnect root folder:
 
 ```bash
-yo boilerplate-extension
+yo @shopgate/boilerplate-extension
 ```
 ## License
 
