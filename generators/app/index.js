@@ -80,13 +80,21 @@ module.exports = class extends Generator {
       this.composeWith(require.resolve('../licence'), {
         config: this.config
       });
+
+      this.composeWith(require.resolve('../docs'), {
+        config: this.config
+      });
+
+      this.composeWith(require.resolve('../changelog'), {
+        config: this.config
+      });
     });
   }
 
   writing() {
     const done = this.async();
 
-    const extractionFolderName = 'generator-boilerplate-extension-template-master'
+    const extractionFolderName = 'generator-boilerplate-extension-template-master';
     tarball.extractTarballDownload(
       'https://codeload.github.com/shopgate/generator-boilerplate-extension-template/tar.gz/master',
       this.destinationPath('./boilerplate.tar.gz'),
@@ -96,8 +104,7 @@ module.exports = class extends Generator {
       {},
       err => {
         if (err) {
-          console.log('Fehler');
-          console.log(err);
+          console.error('Error', err);
           return;
         }
 
@@ -106,13 +113,13 @@ module.exports = class extends Generator {
         );
 
         this.fs.move(
-          extensionPath + extractionFolderName +'/**/*',
+          extensionPath + extractionFolderName + '/**/*',
           String(extensionPath),
           this.config
         );
 
         this.fs.move(
-          extensionPath + extractionFolderName +'/.*',
+          extensionPath + extractionFolderName + '/.*',
           String(extensionPath),
           this.config
         );
