@@ -1,7 +1,9 @@
-'use strict';
 const Generator = require('yeoman-generator');
 
 module.exports = class extends Generator {
+  /**
+   * @inheritDoc
+   */
   prompting() {
     this.props = {};
 
@@ -10,28 +12,28 @@ module.exports = class extends Generator {
         type: 'confirm',
         name: 'generateTravis',
         message: 'Do you want to generate .travis.yml?',
-        default: false
-      }
-    ]).then(props => {
+        default: false,
+      },
+    ]).then((props) => {
       this.props.generateTravis = props.generateTravis;
     });
   }
-
+  /**
+   * @inheritDoc
+   */
   writing() {
-    const extensionPath = this.destinationPath(
-      `extensions/${this.options.config.extension.organization}-${
-        this.options.config.extension.name
-      }/`
-    );
+    const extensionPath = this.destinationPath(`extensions/${this.options.config.extension.organization}-${
+      this.options.config.extension.name
+    }/`);
 
     if (!this.props.generateTravis) {
-      this.fs.delete(extensionPath + '.travis.yml');
+      this.fs.delete(`${extensionPath}.travis.yml`);
       return;
     }
 
     this.fs.copyTpl(
-      extensionPath + '.travis.yml',
-      extensionPath + '.travis.yml',
+      `${extensionPath}.travis.yml`,
+      `${extensionPath}.travis.yml`,
       this.options.config
     );
   }
