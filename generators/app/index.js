@@ -106,16 +106,18 @@ module.exports = class extends Generator {
         const extensionPath =
                 this.destinationPath(`extensions/${this.props.organization}-${this.props.extension}/`);
 
+        /**
+         * A globOptions: dot preserves "dot files"
+         */
         this.fs.move(
-          `${extensionPath + extractionFolderName}/**/*`,
-          String(extensionPath),
-          this.config
-        );
-
-        this.fs.move(
-          `${extensionPath + extractionFolderName}/.*`,
-          String(extensionPath),
-          this.config
+          `${extensionPath}${extractionFolderName}/**`,
+          `${extensionPath}`,
+          {
+            ...this.config,
+            globOptions: {
+              dot: true,
+            },
+          }
         );
 
         this.fs.copyTpl(
