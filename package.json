@@ -3,28 +3,27 @@
   "version": "1.0.0",
   "description": "",
   "homepage": "",
-  "files": ["generators"],
+  "files": [
+    "generators"
+  ],
   "main": "generators/index.js",
   "keywords": [],
   "devDependencies": {
-    "yeoman-test": "^1.7.0",
-    "yeoman-assert": "^3.1.0",
-    "nsp": "^2.6.3",
-    "eslint": "^4.1.0",
-    "prettier": "^1.7.0",
+    "@shopgate/eslint-config": "^5.9.0",
+    "eslint": "^4.19.1",
     "husky": "^0.14.3",
+    "jest": "^22.4.4",
     "lint-staged": "^4.2.1",
-    "eslint-config-prettier": "^2.4.0",
-    "eslint-plugin-prettier": "^2.2.0",
-    "eslint-config-xo": "^0.18.2",
-    "jest": "^22.0.6"
+    "prettier": "^1.15.1",
+    "yeoman-assert": "^3.1.1",
+    "yeoman-test": "^1.9.1"
   },
   "dependencies": {
-    "chalk": "^2.1.0",
+    "chalk": "^2.4.1",
     "download": "^6.2.5",
     "tarball-extract": "0.0.6",
-    "yeoman-generator": "^2.0.1",
-    "yosay": "^2.0.1"
+    "yeoman-generator": "^2.0.5",
+    "yosay": "^2.0.2"
   },
   "jest": {
     "testEnvironment": "node"
@@ -35,25 +34,14 @@
     "test": "jest"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "git add"],
-    "*.json": ["prettier --write", "git add"]
-  },
-  "eslintConfig": {
-    "extends": ["xo", "prettier"],
-    "env": {
-      "jest": true,
-      "node": true
-    },
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "singleQuote": true,
-          "printWidth": 90
-        }
-      ]
-    },
-    "plugins": ["prettier"]
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "license": "Apache-2.0"
 }
