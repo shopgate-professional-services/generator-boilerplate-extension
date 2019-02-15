@@ -92,7 +92,7 @@ module.exports = class extends Generator {
 
     const extractionFolderName = 'generator-boilerplate-extension-template-master';
     tarball.extractTarballDownload(
-      'https://codeload.github.com/shopgate/generator-boilerplate-extension-template/tar.gz/master',
+      'https://codeload.github.com/shopgate-professional-services/generator-boilerplate-extension-template/tar.gz/master',
       this.destinationPath('./boilerplate.tar.gz'),
       this.destinationPath(`./extensions/${this.props.organization}-${this.props.extension}`),
       {},

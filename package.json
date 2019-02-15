@@ -1,6 +1,6 @@
 {
-  "name": "@shopgate/generator-boilerplate-extension",
-  "version": "1.0.1",
+  "name": "@shopgate-ps/generator-boilerplate-extension",
+  "version": "1.0.2",
   "description": "",
   "homepage": "",
   "files": [

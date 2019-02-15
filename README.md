@@ -6,13 +6,13 @@ First, install [Yeoman](http://yeoman.io) and generator-boilerplate-extension us
 
 ```bash
 npm install -g yo
-npm install -g @shopgate/generator-boilerplate-extension
+npm install -g @shopgate-ps/generator-boilerplate-extension
 ```
 
 Then generate your new project inside of your sgconnect root folder:
 
 ```bash
-yo @shopgate/boilerplate-extension
+yo @shopgate-ps/boilerplate-extension
 ```
 ## License
 
