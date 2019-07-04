@@ -23,7 +23,8 @@
     "download": "^6.2.5",
     "tarball-extract": "0.0.6",
     "yeoman-generator": "^2.0.5",
-    "yosay": "^2.0.2"
+    "yosay": "^2.0.2",
+    "snyk": "^1.189.0"
   },
   "jest": {
     "testEnvironment": "node"
@@ -31,7 +32,9 @@
   "scripts": {
     "pretest": "eslint .",
     "precommit": "lint-staged",
-    "test": "jest"
+    "test": "jest",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "lint-staged": {
     "*.js": [
@@ -43,5 +46,6 @@
       "git add"
     ]
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "snyk": true
 }
