@@ -30,7 +30,7 @@
   "scripts": {
     "pretest": "eslint .",
     "precommit": "lint-staged",
-    "test": "jest"
+    "test": "snyk test && jest"
   },
   "lint-staged": {
     "*.js": [
