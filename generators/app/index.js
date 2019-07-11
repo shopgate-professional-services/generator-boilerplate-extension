@@ -1,5 +1,7 @@
 const Generator = require('yeoman-generator');
-const tarball = require('tarball-extract');
+const tar = require('tar');
+const fs = require('fs');
+const download = require('../helpers/download');
 
 module.exports = class extends Generator {
   /**
@@ -91,18 +93,22 @@ module.exports = class extends Generator {
     const done = this.async();
 
     const extractionFolderName = 'generator-boilerplate-extension-template-master';
-    tarball.extractTarballDownload(
-      'https://codeload.github.com/shopgate-professional-services/generator-boilerplate-extension-template/tar.gz/master',
-      this.destinationPath('./boilerplate.tar.gz'),
-      this.destinationPath(`./extensions/${this.props.organization}-${this.props.extension}`),
-      {},
-      (err) => {
-        if (err) {
-          // eslint-disable-next-line no-console
-          console.error('Error', err);
-          return;
-        }
+    const tarballFilePath = './boilerplate.tar.gz';
+    const destinationDirectory = `./extensions/${this.props.organization}-${this.props.extension}`;
 
+    fs.mkdirSync(destinationDirectory);
+
+    download(
+      'https://codeload.github.com/shopgate-professional-services/generator-boilerplate-extension-template/tar.gz/master',
+      tarballFilePath
+    )
+      .then(() => {
+        return tar.x({
+          file: tarballFilePath,
+          cwd: destinationDirectory
+        })
+      })
+      .then(() => {
         const extensionPath =
                 this.destinationPath(`extensions/${this.props.organization}-${this.props.extension}/`);
 
@@ -127,8 +133,11 @@ module.exports = class extends Generator {
         );
 
         done();
-      }
-    );
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Error', error);
+      })
   }
 
   /**

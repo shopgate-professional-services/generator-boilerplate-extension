@@ -1,6 +1,6 @@
 {
   "name": "@shopgate-ps/generator-boilerplate-extension",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "homepage": "",
   "files": [
@@ -20,7 +20,7 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "download": "^7.1.0",
-    "tarball-extract": "0.0.6",
+    "tar": "^4.4.10",
     "yeoman-generator": "^3.2.0",
     "yosay": "^2.0.2"
   },
